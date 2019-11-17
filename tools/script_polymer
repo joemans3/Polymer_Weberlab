@@ -1,0 +1,18 @@
+#!/bin/bash
+
+timestamp() {
+    date +%F_%H-%M-%S
+}
+
+
+mkdir -p $PWD/logs
+time="log-$(timestamp).txt"
+
+echo $time
+
+echo "I'll get right on that!"
+echo "$PWD/logs/$time"
+
+nohup ./run_me2 ini_v1.0.cfg >> $PWD/logs/$time
+
+echo "Done"
