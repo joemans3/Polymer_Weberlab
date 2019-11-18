@@ -13,6 +13,22 @@ echo $time
 echo "I'll get right on that!"
 echo "$PWD/logs/$time"
 
-nohup ./run_me2 ini_v1.0.cfg >> $PWD/logs/$time
+
+
+ARRAY=("1e0" "1e-3" "1e-6" "1e-9" "1e-12" "1e-15" "1e-18" "1e-21")
+
+
+
+for i in "${ARRAY[@]}"; do
+
+	sed -i'.original' -e "14s/.*/	t = ${i};/" ini_v1.0.cfg
+	sed '14q;d' ini_v1.0.cfg
+	nohup ../build/src/Polymer ini_v1.0.cfg >> $PWD/logs/$time
+
+	#this sleep is to make sure there is no naming conflicts when polymer finishes below 1 second (smallest unit for 
+	#distinguishing file name)
+	sleep 1 
+
+done
 
 echo "Done"
