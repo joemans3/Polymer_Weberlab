@@ -26,6 +26,29 @@ Run your executible with alone and have the program prompt you to input paramete
 ```
 Comes with compiled OSX v.10.14.4. Have not tested with windows but linux works.
 
+
+Alternative Route:
+You can also let Cmake/make compile for you.
+
+After cloning this repository create a /Polymer_Weberlab/build/ directory in the main directory and change directory to it in Terminal. 
+
+Type in the following to create make files:
+
+```
+$ ..cmake
+```
+
+Followed by:
+
+```
+$ make
+$ make clean
+```
+
+This will create an executable in the build directory called Polymer. You can interact with this exe using the above commands or use a custom script which creates logs and also iterates over multiple simulations. This is the file ```script_polymer``` (bash) in the /Polymer_Weberlab/tools/ directory. The output of this file will be in the same directory in terms of both log files and data files from Polymer. 
+
+The script is currently set up to iterate over multiple temperatures for a set simulation structure but the user can easily change this to anything they like using the current code as template (and a little bash knowhow). TODO: create other custom bash scripts.
+
 <!---
 A step by step series of examples that tell you how to get a development env running
 
