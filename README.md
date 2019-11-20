@@ -35,7 +35,7 @@ After cloning this repository create a /Polymer_Weberlab/build/ directory in the
 Type in the following to create make files:
 
 ```
-$ ..cmake
+$ cmake ..
 ```
 
 Followed by:
