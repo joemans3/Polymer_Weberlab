@@ -1,0 +1,14 @@
+#!/bin/bash  
+
+file=/mnt/c/Users/Weberlab_Baljyot/source/repos/polymer/tools/11-02-2021/13-40-52
+
+cd $file
+echo $PWD
+
+yourfilenames=$(ls *0)
+for eachfile in $yourfilenames
+do
+	echo $eachfile
+	python3  /mnt/c/Users/Weberlab_Baljyot/source/repos/polymer/external/cpolymer_ana.py $file/$eachfile
+done
+
