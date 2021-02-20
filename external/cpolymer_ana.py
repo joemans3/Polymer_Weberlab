@@ -437,9 +437,6 @@ for i in range(samples[0]):
          per_frame_per_p_y+=list(k[:,1])
          per_frame_per_p_z+=list(k[:,2])
          per_frame_per_p_c+=list(k[:,3])
-         # global_holder_status[i][:,0] = k[:,0]
-         # global_holder_status[i][:,1] = k[:,1]
-         # global_holder_status[i][:,2] = k[:,2]
          t_ar_g = np.zeros((len(k[:,0]),3))
          t_ar_g[:,0] = k[:,0]
          t_ar_g[:,1] = k[:,1]
@@ -489,19 +486,19 @@ for i in range(len(x_per_frame)):
 
 #calculating pair correlation function.
 
-pc_holder=[]
-radius_holder=[]
-radius_holder2=[]
-distance=[]
-radi=[]
+# pc_holder=[]
+# radius_holder=[]
+# radius_holder2=[]
+# distance=[]
+# radi=[]
 
 
-for i in range(len(VA_data_type_O)):
-    temp1 , temp2 ,temp3 , temp4 = paircorrelation3D(x_per_frame[i],y_per_frame[i],z_per_frame[i],sizeN,CM_ar[i],c_per_frame[i],dr=1)
-    pc_holder.append(temp1)
-    radius_holder.append(temp2)
-    distance.append(temp3)
-    radi.append(temp4)
+# for i in range(len(VA_data_type_O)):
+#     temp1 , temp2 ,temp3 , temp4 = paircorrelation3D(x_per_frame[i],y_per_frame[i],z_per_frame[i],sizeN,CM_ar[i],c_per_frame[i],dr=1)
+#     pc_holder.append(temp1)
+#     radius_holder.append(temp2)
+#     distance.append(temp3)
+#     radi.append(temp4)
 
 
 # # for i in range(len(pc_holder[::10])):
