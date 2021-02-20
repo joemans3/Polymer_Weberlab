@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 import os
+from os.path import dirname, basename
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d import axes3d as ax3d
@@ -9,10 +10,14 @@ import matplotlib.colors as colors
 import math
 from pathlib import Path
 
+
 from cmpaircorrelation import *
 from scipy.optimize import curve_fit
 import shutil
 import pdb
+
+
+
 
 #convert degrees to rad
 def d_to_rad(deg_):
@@ -219,7 +224,13 @@ def track_decomp1(x,y,f):
 
 
 
-path = input("Give me path ")
+
+
+
+
+
+
+path = sys.argv[1]#input("Give me path ")
 
 
 
@@ -287,7 +298,7 @@ sizeP = []
 sizeN = 0
 samples = 0
 R = 0
-temp = 0
+tempe = 0
 
 def convert_to_int(input):
 
@@ -334,10 +345,20 @@ with open(path,"r") as f:
             line = temp_line
         elif i == 2:
             line2 = temp_line
-    sizeN,sizeP,sizeM,samples,version,R,temp = convert_globals(line, line2)
+    sizeN,sizeP,sizeM,samples,version,R,tempe = convert_globals(line, line2)
 f.close()
 
+
+
+
+
+
 dname = os.path.dirname(path)
+print("path")
+print(path)
+print("dname")
+print(dname)
+print("done")
 os.chdir(dname)
 
 
@@ -371,7 +392,7 @@ write_bool = False
 
 
 VA_data_type_O = []  #datatype for line plots, doesnt work for animation
-with open(path[len(dname)+1:]+".xyz","w+") as f:
+with open(path+".xyz","w+") as f:
 
     for j in range(0,samples[0]):
         f.write("{0}\n".format(T_P))
@@ -388,25 +409,49 @@ with open(path[len(dname)+1:]+".xyz","w+") as f:
 f.close()
 #finding the center of mass for each frame
 
+
+
+#CHANGE THIS TO ACCOUNT FOR ALL STUFF
+
+################################################################################################################
 CM_ar=[]
 x_per_frame=[]
 y_per_frame=[]
 z_per_frame=[]
 c_per_frame=[]
-for i in VA_data_type_O:
+
+
+global_holder_status = np.zeros((samples[0],np.sum(np.array(sizeP)*np.array(sizeM)),3))
+
+
+for i in range(samples[0]):
    per_frame_per_p_x =[]
    per_frame_per_p_y =[]
    per_frame_per_p_z =[]
    per_frame_per_p_c =[]
-   for j in i[0]:
-       per_frame_per_p_x.append(j[:,0])
-       per_frame_per_p_y.append(j[:,1])
-       per_frame_per_p_z.append(j[:,2])
-       per_frame_per_p_c.append(j[:,3])
-   fx=np.array(per_frame_per_p_x).flatten()
-   fy=np.array(per_frame_per_p_y).flatten()
-   fz=np.array(per_frame_per_p_z).flatten()
-   fc=np.array(per_frame_per_p_c).flatten()
+   total = []
+   for j in VA_data_type_O[i]:
+
+      for k in j:
+         per_frame_per_p_x+=list(k[:,0])
+         per_frame_per_p_y+=list(k[:,1])
+         per_frame_per_p_z+=list(k[:,2])
+         per_frame_per_p_c+=list(k[:,3])
+         t_ar_g = np.zeros((len(k[:,0]),3))
+         t_ar_g[:,0] = k[:,0]
+         t_ar_g[:,1] = k[:,1]
+         t_ar_g[:,2] = k[:,2]
+         total += list(t_ar_g)
+   global_holder_status[i] = np.array(total)
+
+
+
+   fx=np.array(per_frame_per_p_x)
+   fy=np.array(per_frame_per_p_y)   
+   fz=np.array(per_frame_per_p_z)
+   fc=np.array(per_frame_per_p_c)
+   global_holder_status
+
    x_per_frame.append(fx)
    y_per_frame.append(fy)
    z_per_frame.append(fz)
@@ -418,14 +463,14 @@ for i in VA_data_type_O:
 
 
 #finding total distance per frame
-# distance_arr=[]
-# for i in range(len(x_per_frame)):
-#    distance_t=0
-#    for j in range(len(x_per_frame[i])):
-#        for kk in range(j+1,len(x_per_frame[i])):
-#            distance_t+=dist(x_per_frame[i][j],y_per_frame[i][j],z_per_frame[i][j],[x_per_frame[i][kk],y_per_frame[i][kk],z_per_frame[i][kk]],sizeN)
+distance_arr=[]
+for i in range(len(x_per_frame)):
+   distance_t=0
+   for j in range(len(x_per_frame[i])):
+       for kk in range(j+1,len(x_per_frame[i])):
+           distance_t+=dist(x_per_frame[i][j],y_per_frame[i][j],z_per_frame[i][j],[x_per_frame[i][kk],y_per_frame[i][kk],z_per_frame[i][kk]],sizeN)
 
-#    distance_arr.append(distance_t)
+   distance_arr.append(distance_t)
 
 # plt.plot(distance_arr)
 # plt.title("Total Distance per Sample")
@@ -489,17 +534,17 @@ for i in VA_data_type_O:
 
 
 
-# pc_holder=[]
-# radius_holder=[]
-# radius_holder2=[]
-# radi=[]
-# popt1=[]
+pc_holder=[]
+radius_holder=[]
+radius_holder2=[]
+radi=[]
+popt1=[]
 
-# for i in range(len(VA_data_type_O)):
-#    temp1, temp2, temp3 = paircorrelation3D_a(x_per_frame[i],y_per_frame[i],z_per_frame[i],sizeN/2.,CM_ar[i],c_per_frame[i],dr=0.5)
-#    pc_holder.append(temp1)
-#    radius_holder.append(temp2)
-#    radi.append(temp3)
+for i in range(len(VA_data_type_O)):
+   temp1, temp2, temp3 = paircorrelation3D_a(x_per_frame[i],y_per_frame[i],z_per_frame[i],sizeN/2.,CM_ar[i],c_per_frame[i],dr=0.5)
+   pc_holder.append(temp1)
+   radius_holder.append(temp2)
+   radi.append(temp3)
 
 '''
 #radius_holder2.append(temp3)
@@ -566,17 +611,17 @@ plt.show()
 
 
 
-temp=[]
+# temp=[]
 
-for j in VA_data_type_O:
-    tmp=[]
-    for i in j:
-        for k in i:
-            for uu in k:
-                tmp.append(uu)
-    temp.append(np.array(tmp))
+# for j in VA_data_type_O:
+#     tmp=[]
+#     for i in j:
+#         for k in i:
+#             for uu in k:
+#                 tmp.append(uu)
+#     temp.append(np.array(tmp))
 
-animate_DT=temp
+# animate_DT=temp
 
 ############################################################################################
 #msd stuff for SINGLE POLYMER SIMULATIONS ONLY!
@@ -784,19 +829,20 @@ for k in range(len(sizeM)):
 #plotting angle stuff
 
 
-for i in range(len(ang_global[0])):
-    for j in range(len(ang_global[0][i])):
-        hist_polar(ang_global[0][i][j])
+# for i in range(len(ang_global[0])):
+#     for j in range(len(ang_global[0][i])):
+#         hist_polar(ang_global[0][i][j])
 
 
 
-hist_polar(ang_global[1][0][0])
+#hist_polar(ang_global[1][0][0])
 
 
 
-
-
-
+print("fit_masaa")
+print(fit_msdaa)
+print(fit_msdaa_cm)
+print(msd_s_meana_cm)
 
 
 
@@ -841,35 +887,35 @@ def msd_plot(m,c12,a,b,verbose = False,cm = False): #a,b = expanded values of fi
     return
 
 
-# fig = plt.figure()
-# ax = fig.add_subplot(211)
-# ax2 = fig.add_subplot(212)
+fig = plt.figure()
+ax = fig.add_subplot(211)
+ax2 = fig.add_subplot(212)
 
-# for i in range(len(msd_s_meana)):
-#     ax.plot(list(range(1,len(msd_s_meana[i])+1)),msd_s_meana[i],label="{0}".format(i+1))
-#     ax.plot(list(range(1,len(msd_s_meana_cm[i])+1)),msd_s_meana_cm[i])
+for i in range(len(msd_s_meana)):
+    ax.plot(list(range(1,len(msd_s_meana[i])+1)),msd_s_meana[i],label="{0}".format(i+1))
+    ax.plot(list(range(1,len(msd_s_meana_cm[i])+1)),msd_s_meana_cm[i])
 
-#     ax.plot(msd_line(fit_msdaa[0],len(msd_s_meana[i])))
-#         #plt.plot(msd_line2([a,b],len(m[i])))
-#     #plt.plot(msd_line(fit_msdaa_cm[0],len(m[i])))
-# ax2.plot(fit_verbosed[0])
-# ax.annotate('A', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-# ax2.annotate('B', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-# ax.set_ylabel("Log10 MSD (au)")
-# ax.set_xlabel("Log10 Tau")
-# #plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
-# ax.set_yscale("log")
-# ax.set_xscale("log")
+    ax.plot(msd_line(fit_msdaa[0],len(msd_s_meana[i])))
+        #plt.plot(msd_line2([a,b],len(m[i])))
+    #plt.plot(msd_line(fit_msdaa_cm[0],len(m[i])))
+ax2.plot(fit_verbosed[0])
+ax.annotate('A', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+ax2.annotate('B', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+ax.set_ylabel("Log10 MSD (au)")
+ax.set_xlabel("Log10 Tau")
+#plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
+ax.set_yscale("log")
+ax.set_xscale("log")
 
-# ax2.set_ylabel("Diffusion Coefficient (au)")
-# ax2.set_xlabel("Monomer Index")
-# #plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
-# # ax2.yscale("log")
-# # ax2.xscale("log")
-# #plt.legend()
-# fig.tight_layout()
-# fig.savefig("time")
-# fig.show()
+ax2.set_ylabel("Diffusion Coefficient (au)")
+ax2.set_xlabel("Monomer Index")
+#plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
+# ax2.yscale("log")
+# ax2.xscale("log")
+#plt.legend()
+fig.tight_layout()
+fig.savefig("time")
+fig.show()
 
 
 
@@ -1043,6 +1089,89 @@ def plot_correlation_time(correlation):
 
 
 
+#####SAVING STUFF
+
+save_rate = 1
+
+base_dir = dirname(os.getcwd())
+base1 = base_dir + "/" + "global_name"
+if (not os.path.exists(base1)):
+    os.makedirs(base1) 
+
+base2 = base1 + "/" + str(tempe)
+if (not os.path.exists(base2)):
+    os.makedirs(base2)
+
+s_msd_s_meana = np.array(msd_s_meana)
+np.savetxt(base2+"/s_msd_s_meana.txt",s_msd_s_meana)
+s_msd_s_meana_cm = np.array(msd_s_meana_cm)
+np.savetxt(base2+"/s_msd_s_meana_cm.txt",s_msd_s_meana_cm)
+s_radius_holder = np.array(radius_holder)[::10]
+np.savetxt(base2+"/s_radius_holder.txt",s_radius_holder)
+
+if (not os.path.exists(str(tempe)+"/files")):
+    os.makedirs(base2+"/files")
+
+for i in range(int(samples[0]/save_rate)):
+    np.savetxt(base2+"/files/{0}.txt".format(i),global_holder_status[i])
+
+
+
+
+###do pbcluster analysis:
+from pbcluster import Trajectory
+import pandas as pd
+particle_coords = np.array(global_holder_status)
+box_lengths = np.zeros((samples[0],3)) + sizeN
+
+cutoff_distance = 4.95
+
+trajectory = Trajectory(particle_coords, box_lengths[0,:], cutoff_distance)
+cluster_properties_df = trajectory.compute_cluster_properties(properties="all")
+
+
+particle_properties_df = trajectory.compute_particle_properties(properties="all")
+
+
+#extract cluster properties
+#rg,n_particles,asphericity,timestep_cluster
+rg = cluster_properties_df['rg']
+np.savetxt(base2+"/rg.txt",rg)
+n_particles = cluster_properties_df['n_particles']
+np.savetxt(base2+"/n_particles.txt",n_particles)
+asphericity = cluster_properties_df['asphericity']
+np.savetxt(base2+"/asphericity.txt",asphericity)
+timestep_cluster = cluster_properties_df['timestep']
+np.savetxt(base2+"/timestep_cluster.txt",timestep_cluster)
+
+#extract particle properties
+#particle_id,coordination_number,cluster_id,timestep_particle
+particle_id = particle_properties_df['particle_id']
+np.savetxt(base2+"/particle_id.txt",particle_id)
+coordination_number = particle_properties_df['coordination_number']
+np.savetxt(base2+"/coordination_number.txt",coordination_number)
+cluster_id = particle_properties_df['cluster_id']
+np.savetxt(base2+"/cluster_id.txt",cluster_id)
+timestep_particle = particle_properties_df['timestep']
+np.savetxt(base2+"/timestep_particle.txt",timestep_particle)
+
+
+
+from sklearn.cluster import AgglomerativeClustering
+
+cluster_object = np.zeros((samples[0],len(global_holder_status[0])))
+
+for i in range(samples[0]):
+    cluster = AgglomerativeClustering(n_clusters=None, affinity='euclidean', linkage='ward', distance_threshold = 3.0)
+    cluster.fit_predict(global_holder_status[i])
+    cluster_object[i] = cluster.labels_
+    print(cluster_object[i])
+
+if (not os.path.exists(str(tempe)+"/files_cluster")):
+    os.makedirs(base2+"/files_cluster")
+
+for i in range(int(samples[0]/save_rate)):
+    np.savetxt(base2+"/files_cluster/{0}.txt".format(i),cluster_object[i])
 
 
 
@@ -1050,116 +1179,110 @@ def plot_correlation_time(correlation):
 
 
 
+# def normalize_colors(color_float, max_c = 10., min_c = -10., range_min = 0., range_max = 1.):
+
+#     return (range_max - range_min) * ((color_float - min_c))/(max_c - min_c) + range_min
+
+
+# import matplotlib.cm as cm_color
+# def hi(val = 10):
+#     #############################################################################################
+#     #
+#     ##plotting and animations
+#     #
+#     #############################################################################################
+
+#     #Set up formatting for the movie files
+#     Writer = matplotlib.animation.writers['ffmpeg']
+#     writer = Writer(fps=10, metadata=dict(artist='Baljyot Parmar, all rights reserved'), bitrate=1800)
+
+#     norm = colors.Normalize(vmin=-10, vmax=10)
+#     m = cm_color.ScalarMappable(norm=norm, cmap="winter")
+
+
+#     fig = plt.figure()
+#     ax = fig.add_subplot(111, projection='3d')
+#     title = ax.set_title('3D Test')
+
+
+#     def update_graph(num):
+#         i = animate_DT[num]
+
+#         graph._offsets3d = (i[:,0],i[:,1],i[:,2])
+
+
+#         title.set_text('3D Test, Sample={}'.format(num))
+
+#     graph = ax.scatter(animate_DT[0][:,0],animate_DT[0][:,1],animate_DT[0][:,2]) # for color coded with charge add c=m.to_rgba(animate_DT[0][:,3]) to plot argument
+
+#     ax.set_xbound(lower=-1,upper=sizeN+1)
+#     ax.set_ybound(lower=-1,upper=sizeN+1)
+#     ax.set_zbound(lower=-1,upper=sizeN+1)
+#     ax.set_xlabel("x")
+#     ax.set_ylabel("y")
+#     ax.set_zlabel("z")
+#     ani = matplotlib.animation.FuncAnimation(fig, update_graph, list(range(1,samples[0])), blit=False)
+#     ##ani.save('/Users/baljyot/Documents/Polymer_Output/new_ani.mp4',writer=writer)
+#     ani.save('{0}/new_ani.mp4'.format(os.getcwd()),writer=writer)
+#     plt.show(block = False)
+#     plt.pause(20)
+    
 
 
 
 
+#     fig = plt.figure()
+#     ax = fig.add_subplot(221,projection = '3d')
+#     ax.set_xlim([0, sizeN])
+#     ax.set_ylim([0, sizeN])
+#     ax.set_zlim([0, sizeN])
+
+#     ax2 = fig.add_subplot(222,projection = '3d')
+#     ax2.set_xlim([0, sizeN])
+#     ax2.set_ylim([0, sizeN])
+#     ax2.set_zlim([0, sizeN])
+
+#     ax3 = fig.add_subplot(223)
+#     ax4 = fig.add_subplot(224)
+
+#     ax.scatter(animate_DT[0][:,0],animate_DT[0][:,1],animate_DT[0][:,2]) #color add , c=m.to_rgba(animate_DT[0][:,3])
+#     ax.set_title("Simulation time = 0")
+#     ax2.scatter(animate_DT[samples[0]-1][:,0],animate_DT[samples[0]-1][:,1],animate_DT[samples[0]-1][:,2]) # for color coded with charge add c=m.to_rgba(animate_DT[samples[0]-1][:,3]) to plot argument
+#     ax2.set_title("Simulation time = {0}".format(R))
+#     ax3.plot(np.arange(0,R,(R/(samples[0]-1))),distance_arr[1:])
+#     ax3.set_xticks(np.linspace(0,R,3))
+#     ax4.plot(np.arange(0,R,(R/(samples[0]-1))),1./(np.array(radius_holder)[:,1])[1:])
+#     ax4.set_xticks(np.linspace(0,R,3))
+#     ax3.set_xlabel("Simulation time (au)")
+#     ax3.set_ylabel("Total distance (au)")
+#     ax4.set_xlabel("Simulation time (au)")
+#     ax4.set_ylabel("Correlation length (au)")
+#     ax.annotate('A', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+#     ax2.annotate('B', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+#     ax3.annotate('C', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+#     ax4.annotate('D', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+#     plt.tight_layout()
+#     plt.savefig("Panel")
+
+#     plt.plot(animate_DT[0][:,0],animate_DT[0][:,1],'ro')
+#     plt.show(block = False)
+    
+    
+#     for k in range(0,samples[0]):
+#         for i in VA_data_type_O[k]:
+#             for j in i:
+#                 ax.scatter(j[:,0],j[:,1],j[:,2]) #for color add ,c=j[:,3] to argument
+#         #ax.plot(j[:,0],j[:,1],j[:,2],'-b')
+#         ax.set_xbound(lower=0,upper=sizeN)
+#         ax.set_ybound(lower=0,upper=sizeN)
+#         ax.set_zbound(lower=0,upper=sizeN)
+#     plt.show(block = False)
+    
+
+#     return 
 
 
-
-
-
-
-
-def normalize_colors(color_float, max_c = 10., min_c = -10., range_min = 0., range_max = 1.):
-
-    return (range_max - range_min) * ((color_float - min_c))/(max_c - min_c) + range_min
-
-
-import matplotlib.cm as cm_color
-def hi(val = 10):
-    #############################################################################################
-    #
-    ##plotting and animations
-    #
-    #############################################################################################
-
-    #Set up formatting for the movie files
-    Writer = matplotlib.animation.writers['ffmpeg']
-    writer = Writer(fps=10, metadata=dict(artist='Baljyot Parmar, all rights reserved'), bitrate=1800)
-
-    norm = colors.Normalize(vmin=-10, vmax=10)
-    m = cm_color.ScalarMappable(norm=norm, cmap="winter")
-
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    title = ax.set_title('3D Test')
-
-
-    def update_graph(num):
-        i = animate_DT[num]
-
-        graph._offsets3d = (i[:,0],i[:,1],i[:,2])
-
-
-        title.set_text('3D Test, Sample={}'.format(num))
-
-    graph = ax.scatter(animate_DT[0][:,0],animate_DT[0][:,1],animate_DT[0][:,2]) # for color coded with charge add c=m.to_rgba(animate_DT[0][:,3]) to plot argument
-
-    ax.set_xbound(lower=-1,upper=sizeN+1)
-    ax.set_ybound(lower=-1,upper=sizeN+1)
-    ax.set_zbound(lower=-1,upper=sizeN+1)
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
-    ax.set_zlabel("z")
-    ani = matplotlib.animation.FuncAnimation(fig, update_graph, list(range(1,samples[0])), blit=False)
-    ##ani.save('/Users/baljyot/Documents/Polymer_Output/new_ani.mp4',writer=writer)
-    ani.save('{0}/new_ani.mp4'.format(os.getcwd()),writer=writer)
-    plt.show()
-
-
-
-
-    fig = plt.figure()
-    ax = fig.add_subplot(221,projection = '3d')
-    ax.set_xlim([0, sizeN])
-    ax.set_ylim([0, sizeN])
-    ax.set_zlim([0, sizeN])
-
-    ax2 = fig.add_subplot(222,projection = '3d')
-    ax2.set_xlim([0, sizeN])
-    ax2.set_ylim([0, sizeN])
-    ax2.set_zlim([0, sizeN])
-
-    ax3 = fig.add_subplot(223)
-    ax4 = fig.add_subplot(224)
-
-    ax.scatter(animate_DT[0][:,0],animate_DT[0][:,1],animate_DT[0][:,2]) #color add , c=m.to_rgba(animate_DT[0][:,3])
-    ax.set_title("Simulation time = 0")
-    ax2.scatter(animate_DT[samples[0]-1][:,0],animate_DT[samples[0]-1][:,1],animate_DT[samples[0]-1][:,2]) # for color coded with charge add c=m.to_rgba(animate_DT[samples[0]-1][:,3]) to plot argument
-    ax2.set_title("Simulation time = {0}".format(R))
-    ax3.plot(np.arange(0,R,(R/(samples[0]-1))),distance_arr[1:])
-    ax3.set_xticks(np.linspace(0,R,3))
-    ax4.plot(np.arange(0,R,(R/(samples[0]-1))),1./(np.array(radius_holder)[:,1])[1:])
-    ax4.set_xticks(np.linspace(0,R,3))
-    ax3.set_xlabel("Simulation time (au)")
-    ax3.set_ylabel("Total distance (au)")
-    ax4.set_xlabel("Simulation time (au)")
-    ax4.set_ylabel("Correlation length (au)")
-    ax.annotate('A', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-    ax2.annotate('B', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-    ax3.annotate('C', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-    ax4.annotate('D', xy=(-40, val + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-    plt.tight_layout()
-    plt.savefig("Panel")
-
-    plt.plot(animate_DT[0][:,0],animate_DT[0][:,1],'ro')
-    plt.show()
-    '''
-    '''
-    for k in range(0,samples[0]):
-        for i in VA_data_type_O[k]:
-            for j in i:
-                ax.scatter(j[:,0],j[:,1],j[:,2]) #for color add ,c=j[:,3] to argument
-        #ax.plot(j[:,0],j[:,1],j[:,2],'-b')
-        ax.set_xbound(lower=0,upper=sizeN)
-        ax.set_ybound(lower=0,upper=sizeN)
-        ax.set_zbound(lower=0,upper=sizeN)
-    plt.show()
-
-    return 
-
+# #hi()
 
 
 

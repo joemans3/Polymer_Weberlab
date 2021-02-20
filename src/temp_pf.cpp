@@ -8,12 +8,12 @@
 
 #include <stdio.h>
 #include <ctime>
+#include <sys/stat.h>
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <fcntl.h>
 #include <sys/mman.h>
-#include <sys/stat.h>
 #include <stdlib.h>
 #include <boost/random.hpp>
 #include <boost/generator_iterator.hpp>
@@ -22,6 +22,9 @@
 #include <boost/range/irange.hpp>
 #include <boost/range/algorithm_ext/push_back.hpp>
 #include <boost/range/numeric.hpp>
+//#define BOOST_NO_CXX11_SCOPED_ENUMS
+#include <boost/filesystem.hpp>
+//#undef BOOST_NO_CXX11_SCOPED_ENUMS
 #include <unordered_map>
 #include <iterator>
 #include <algorithm>
@@ -268,10 +271,12 @@ int main(int argc, const char * argv[]){
 
 
         libconfig::Config cfg;
+        /*
         cfg.setOptions(libconfig::Config::OptionFsync
                 | libconfig::Config::OptionSemicolonSeparators
                 | libconfig::Config::OptionColonAssignmentForGroups
                 | libconfig::Config::OptionOpenBraceOnSeparateLine);
+        */
         try
         {
             cfg.readFile(argv[1]);
@@ -710,15 +715,25 @@ char const* CSV_out::get_folder_path(std::vector<int> P,std::vector<int> M,int N
     std::cout << "str date"<< str_day <<std::endl;
     
     std::string new_cwd_folder = cwd + "/" + str_day;
+    std::cout << new_cwd_folder << std::endl;
     filename = (new_cwd_folder + "/" + str_time + "_P" + convert_vec_string(P) + "_M" + convert_vec_string(M) + "_N" + std::to_string(N) + "_R" + std::to_string(R) + "_S" + std::to_string(S)).c_str();
     char const* ca = new_cwd_folder.c_str();
+    std::cout << ca << std::endl;
     return ca;
 }
 
 
 CSV_out::CSV_out(std::vector<int> P,std::vector<int> M,int N,int R,int S){
-    folder_path = get_folder_path(P,M,N,R,S);
+    char const* folder_path = get_folder_path(P,M,N,R,S);
     std::cout << "folder name"<< folder_path <<std::endl;
+    /*
+    boost::filesystem::path dir(folder_path);
+    if(boost::filesystem::create_directory(dir))
+	{
+    	std::cerr<< "Directory Created: "<<std::endl;
+	}
+	*/
+	
     if (mkdir(folder_path,0777)){
 
         if( errno == EEXIST ) {
@@ -726,10 +741,11 @@ CSV_out::CSV_out(std::vector<int> P,std::vector<int> M,int N,int R,int S){
         } else {
            // something else
             std::cout << "cannot create session folder name error:" << strerror(errno) << std::endl;
-            exit(1);
+            //exit(1);
         }
     }   
     //mkdir(folder_path,0777)
+    
 }
 
 

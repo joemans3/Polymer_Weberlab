@@ -7,11 +7,11 @@ version = "1.0";
 global_vars = 
 {
 	box_dim =200;
-	polymer_n = [1];
-	monomer_n = [2];
+	polymer_n = [30];
+	monomer_n = [20];
 	simtime_t = 100000;
 	samples = 100;
-	t = 1e6;
+	t = 1e0;
 
 };
 
