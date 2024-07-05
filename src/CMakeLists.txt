@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.6)
 find_package(Boost 1.36.0)
-find_library(CONFIG++_LIBRARY NAMES config++ PATH /usr/lib /usr/local/lib)
-
+find_path(LIB_LIB_DIR libconfig.h++)
+find_library(CONFIG++_LIBRARY NAMES config++ libconfig++ PATH /usr/lib /usr/local/lib /Users/baljyot/Documents/CODE/GitHub_t2/MSc/Boost/ /Users/baljyot/Documents/CODE/GitHub_t2/MSc/Boost/boost_1_36_0 /usr/local/Cellar/libconfig/1.7.2/lib)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
   include_directories(''/usr/local/include'')
   add_executable(Polymer temp_pf.cpp)
+  target_include_directories(Polymer PRIVATE ${LIB_LIB_DIR})
   target_link_libraries(Polymer ${CONFIG++_LIBRARY})
 endif()

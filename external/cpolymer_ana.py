@@ -414,63 +414,63 @@ f.close()
 #CHANGE THIS TO ACCOUNT FOR ALL STUFF
 
 ################################################################################################################
-CM_ar=[]
-x_per_frame=[]
-y_per_frame=[]
-z_per_frame=[]
-c_per_frame=[]
+# CM_ar=[]
+# x_per_frame=[]
+# y_per_frame=[]
+# z_per_frame=[]
+# c_per_frame=[]
 
 
-global_holder_status = np.zeros((samples[0],np.sum(np.array(sizeP)*np.array(sizeM)),3))
+# global_holder_status = np.zeros((samples[0],np.sum(np.array(sizeP)*np.array(sizeM)),3))
 
 
-for i in range(samples[0]):
-   per_frame_per_p_x =[]
-   per_frame_per_p_y =[]
-   per_frame_per_p_z =[]
-   per_frame_per_p_c =[]
-   total = []
-   for j in VA_data_type_O[i]:
+# for i in range(samples[0]):
+#    per_frame_per_p_x =[]
+#    per_frame_per_p_y =[]
+#    per_frame_per_p_z =[]
+#    per_frame_per_p_c =[]
+#    total = []
+#    for j in VA_data_type_O[i]:
 
-      for k in j:
-         per_frame_per_p_x+=list(k[:,0])
-         per_frame_per_p_y+=list(k[:,1])
-         per_frame_per_p_z+=list(k[:,2])
-         per_frame_per_p_c+=list(k[:,3])
-         t_ar_g = np.zeros((len(k[:,0]),3))
-         t_ar_g[:,0] = k[:,0]
-         t_ar_g[:,1] = k[:,1]
-         t_ar_g[:,2] = k[:,2]
-         total += list(t_ar_g)
-   global_holder_status[i] = np.array(total)
+#       for k in j:
+#          per_frame_per_p_x+=list(k[:,0])
+#          per_frame_per_p_y+=list(k[:,1])
+#          per_frame_per_p_z+=list(k[:,2])
+#          per_frame_per_p_c+=list(k[:,3])
+#          t_ar_g = np.zeros((len(k[:,0]),3))
+#          t_ar_g[:,0] = k[:,0]
+#          t_ar_g[:,1] = k[:,1]
+#          t_ar_g[:,2] = k[:,2]
+#          total += list(t_ar_g)
+#    global_holder_status[i] = np.array(total)
 
 
 
-   fx=np.array(per_frame_per_p_x)
-   fy=np.array(per_frame_per_p_y)   
-   fz=np.array(per_frame_per_p_z)
-   fc=np.array(per_frame_per_p_c)
-   global_holder_status
+#    fx=np.array(per_frame_per_p_x)
+#    fy=np.array(per_frame_per_p_y)   
+#    fz=np.array(per_frame_per_p_z)
+#    fc=np.array(per_frame_per_p_c)
+#    global_holder_status
 
-   x_per_frame.append(fx)
-   y_per_frame.append(fy)
-   z_per_frame.append(fz)
-   c_per_frame.append(fc)
-   CM_ar.append(cm(fx,fy,fz,sizeN))
+#    x_per_frame.append(fx)
+#    y_per_frame.append(fy)
+#    z_per_frame.append(fz)
+#    c_per_frame.append(fc)
+#    CM_ar.append(cm(fx,fy,fz,sizeN))
 
 
 
 
 
 #finding total distance per frame
-distance_arr=[]
-for i in range(len(x_per_frame)):
-   distance_t=0
-   for j in range(len(x_per_frame[i])):
-       for kk in range(j+1,len(x_per_frame[i])):
-           distance_t+=dist(x_per_frame[i][j],y_per_frame[i][j],z_per_frame[i][j],[x_per_frame[i][kk],y_per_frame[i][kk],z_per_frame[i][kk]],sizeN)
+# distance_arr=[]
+# for i in range(len(x_per_frame)):
+#    distance_t=0
+#    for j in range(len(x_per_frame[i])):
+#        for kk in range(j+1,len(x_per_frame[i])):
+#            distance_t+=dist(x_per_frame[i][j],y_per_frame[i][j],z_per_frame[i][j],[x_per_frame[i][kk],y_per_frame[i][kk],z_per_frame[i][kk]],sizeN)
 
-   distance_arr.append(distance_t)
+#    distance_arr.append(distance_t)
 
 # plt.plot(distance_arr)
 # plt.title("Total Distance per Sample")
@@ -534,17 +534,17 @@ for i in range(len(x_per_frame)):
 
 
 
-pc_holder=[]
-radius_holder=[]
-radius_holder2=[]
-radi=[]
-popt1=[]
+# pc_holder=[]
+# radius_holder=[]
+# radius_holder2=[]
+# radi=[]
+# popt1=[]
 
-for i in range(len(VA_data_type_O)):
-   temp1, temp2, temp3 = paircorrelation3D_a(x_per_frame[i],y_per_frame[i],z_per_frame[i],sizeN/2.,CM_ar[i],c_per_frame[i],dr=0.5)
-   pc_holder.append(temp1)
-   radius_holder.append(temp2)
-   radi.append(temp3)
+# for i in range(len(VA_data_type_O)):
+#    temp1, temp2, temp3 = paircorrelation3D_a(x_per_frame[i],y_per_frame[i],z_per_frame[i],sizeN/2.,CM_ar[i],c_per_frame[i],dr=0.5)
+#    pc_holder.append(temp1)
+#    radius_holder.append(temp2)
+#    radi.append(temp3)
 
 '''
 #radius_holder2.append(temp3)
@@ -705,123 +705,123 @@ def MSD_Calculation(x):
 ############################################################################################
 #msd stuff for ALL POLYMER SIMULATIONS
 
-new_size = np.asarray(sizeM)*np.asarray(sizeP)
-#tracks per polymer type
-track_ptype = []
+# new_size = np.asarray(sizeM)*np.asarray(sizeP)
+# #tracks per polymer type
+# track_ptype = []
 
 
-msd_t_meana = np.zeros(len(sizeM))
-msd_t_mean_verba = []
+# msd_t_meana = np.zeros(len(sizeM))
+# msd_t_mean_verba = []
     
-fit_verbosea = [[] for i in new_size]
-fit_verbosed = [[] for i in new_size]
-fit_msdaa = []
+# fit_verbosea = [[] for i in new_size]
+# fit_verbosed = [[] for i in new_size]
+# fit_msdaa = []
 
 
-msd_s_meana = []
-msd_s_mean_va = [[] for i in new_size]
+# msd_s_meana = []
+# msd_s_mean_va = [[] for i in new_size]
 
 
-msd_t_meana_cm = np.zeros(len(sizeM))
-msd_t_mean_verba_cm = []
+# msd_t_meana_cm = np.zeros(len(sizeM))
+# msd_t_mean_verba_cm = []
     
 
-fit_msdaa_cm = []
+# fit_msdaa_cm = []
 
 
-msd_s_meana_cm = []
-
-
-
-
-
-
-#global holder array for angle stuff
-ang_global = []
-
-
-for k in range(len(sizeM)):
-
-
-    #structured arrays for msd calculations
-    n_ordered_arr = np.zeros((sizeM[k],sizeP[k],samples[0],4))
-    cm_ordered_arr = np.zeros((1,sizeP[k],samples[0],3))
-
-
-    #structured arrays for angle between line n trajectory
-    #setup as n_ordered_arr but with size ((sizeM[k],sizeP[k],samples[0]-2))
-
-    ang_ordered_arr = np.zeros((sizeM[k],sizeP[k],samples[0]-2))
-
-
-    for i in range(len(VA_data_type_O)):
-        for j in range(len(VA_data_type_O[i][k])):
-            for l in range(len(VA_data_type_O[i][k][j])):
-                n_ordered_arr[l][j][i] = VA_data_type_O[i][k][j][l]
-            cm_ordered_arr[0][j][i] = cm(VA_data_type_O[i][k][j][:,0],VA_data_type_O[i][k][j][:,1],VA_data_type_O[i][k][j][:,2],sizeN)
+# msd_s_meana_cm = []
 
 
 
 
-    #do the angle calculations
-    for i in range(len(ang_ordered_arr)):
-        for j in range(len(ang_ordered_arr[i])):
-            temp_array = np.asarray(n_ordered_arr[i][j])
-            ang_ordered_arr[i][j] = angle_trajectory_3d(temp_array[:,0],temp_array[:,1],temp_array[:,2])
-
-    ang_global.append(ang_ordered_arr)  
-    # outdated code to save data to file for angle -> now do it in this script: TODO -> make a modular way for this to occur
-    # import csv
-    # with open('employee_file_{0}.csv'.format(k), mode='w') as employee_file:
-    #     employee_writer = csv.writer(employee_file, delimiter=',')
-
-    #     for j in n_ordered_arr[0]:
-    #         for i in n_ordered_arr[0][0]:
-    #             employee_writer.writerow(i)
 
 
+# #global holder array for angle stuff
+# ang_global = []
 
 
-    MSD_Calculation(cm_ordered_arr)
-    track_ptype.append(n_ordered_arr)
-
-    #msd
-    msd_t_mean = np.zeros(len(n_ordered_arr))
+# for k in range(len(sizeM)):
 
 
-    fit_verbose = []
-    msd_s_mean = []
-    msd_s_mean_v = []
+#     #structured arrays for msd calculations
+#     n_ordered_arr = np.zeros((sizeM[k],sizeP[k],samples[0],4))
+#     cm_ordered_arr = np.zeros((1,sizeP[k],samples[0],3))
 
 
-    for i in range(len(n_ordered_arr)):
-        msd_t_mean_p = np.zeros(len(n_ordered_arr[i]))
-        msd_dec = []
+#     #structured arrays for angle between line n trajectory
+#     #setup as n_ordered_arr but with size ((sizeM[k],sizeP[k],samples[0]-2))
+
+#     ang_ordered_arr = np.zeros((sizeM[k],sizeP[k],samples[0]-2))
+
+
+#     for i in range(len(VA_data_type_O)):
+#         for j in range(len(VA_data_type_O[i][k])):
+#             for l in range(len(VA_data_type_O[i][k][j])):
+#                 n_ordered_arr[l][j][i] = VA_data_type_O[i][k][j][l]
+#             cm_ordered_arr[0][j][i] = cm(VA_data_type_O[i][k][j][:,0],VA_data_type_O[i][k][j][:,1],VA_data_type_O[i][k][j][:,2],sizeN)
+
+
+
+
+#     #do the angle calculations
+#     for i in range(len(ang_ordered_arr)):
+#         for j in range(len(ang_ordered_arr[i])):
+#             temp_array = np.asarray(n_ordered_arr[i][j])
+#             ang_ordered_arr[i][j] = angle_trajectory_3d(temp_array[:,0],temp_array[:,1],temp_array[:,2])
+
+#     ang_global.append(ang_ordered_arr)  
+#     # outdated code to save data to file for angle -> now do it in this script: TODO -> make a modular way for this to occur
+#     # import csv
+#     # with open('employee_file_{0}.csv'.format(k), mode='w') as employee_file:
+#     #     employee_writer = csv.writer(employee_file, delimiter=',')
+
+#     #     for j in n_ordered_arr[0]:
+#     #         for i in n_ordered_arr[0][0]:
+#     #             employee_writer.writerow(i)
+
+
+
+
+#     MSD_Calculation(cm_ordered_arr)
+#     track_ptype.append(n_ordered_arr)
+
+#     #msd
+#     msd_t_mean = np.zeros(len(n_ordered_arr))
+
+
+#     fit_verbose = []
+#     msd_s_mean = []
+#     msd_s_mean_v = []
+
+
+#     for i in range(len(n_ordered_arr)):
+#         msd_t_mean_p = np.zeros(len(n_ordered_arr[i]))
+#         msd_dec = []
         
-        for j in range(len(n_ordered_arr[i])):
-            pp = n_ordered_arr[i][j]
+#         for j in range(len(n_ordered_arr[i])):
+#             pp = n_ordered_arr[i][j]
             
-            msd_t_mean_p[j] = MSD_tavg(pp[:,0],pp[:,1],pp[:,2],1,sizeN)
-            tttt=track_decomp(pp[:,0],pp[:,1],pp[:,2],1,sizeN)
-            msd_dec.append(tttt)
-            msd_s_mean_va[k].append(tttt)
-            aaaa=fit_decom(tttt)
-            fit_verbosea[k] = fit_verbosea[k] + [aaaa[0][1]]
-            fit_verbosed[k] = fit_verbosed[k] + [aaaa[0][0]]
+#             msd_t_mean_p[j] = MSD_tavg(pp[:,0],pp[:,1],pp[:,2],1,sizeN)
+#             tttt=track_decomp(pp[:,0],pp[:,1],pp[:,2],1,sizeN)
+#             msd_dec.append(tttt)
+#             msd_s_mean_va[k].append(tttt)
+#             aaaa=fit_decom(tttt)
+#             fit_verbosea[k] = fit_verbosea[k] + [aaaa[0][1]]
+#             fit_verbosed[k] = fit_verbosed[k] + [aaaa[0][0]]
         
 
 
-        msd_dec = np.mean(np.asarray(msd_dec),axis = 0)
-        msd_s_mean.append(msd_dec)
+#         msd_dec = np.mean(np.asarray(msd_dec),axis = 0)
+#         msd_s_mean.append(msd_dec)
                         
-        msd_t_mean[i] = np.mean(msd_t_mean_p)
+#         msd_t_mean[i] = np.mean(msd_t_mean_p)
 
-    msd_s_meana.append(np.mean(np.asarray(msd_s_mean),axis = 0))
+#     msd_s_meana.append(np.mean(np.asarray(msd_s_mean),axis = 0))
 
-    fit_msdaa.append(fit_decom(np.mean(np.asarray(msd_s_mean),axis = 0))[k])
+#     fit_msdaa.append(fit_decom(np.mean(np.asarray(msd_s_mean),axis = 0))[k])
 
-    msd_t_meana[k] = np.mean(msd_t_mean)
-    msd_t_mean_verba.append(msd_t_mean)
+#     msd_t_meana[k] = np.mean(msd_t_mean)
+#     msd_t_mean_verba.append(msd_t_mean)
 
 
 
@@ -839,10 +839,10 @@ for k in range(len(sizeM)):
 
 
 
-print("fit_masaa")
-print(fit_msdaa)
-print(fit_msdaa_cm)
-print(msd_s_meana_cm)
+# print("fit_masaa")
+# print(fit_msdaa)
+# print(fit_msdaa_cm)
+# print(msd_s_meana_cm)
 
 
 
@@ -887,35 +887,35 @@ def msd_plot(m,c12,a,b,verbose = False,cm = False): #a,b = expanded values of fi
     return
 
 
-fig = plt.figure()
-ax = fig.add_subplot(211)
-ax2 = fig.add_subplot(212)
+# fig = plt.figure()
+# ax = fig.add_subplot(211)
+# ax2 = fig.add_subplot(212)
 
-for i in range(len(msd_s_meana)):
-    ax.plot(list(range(1,len(msd_s_meana[i])+1)),msd_s_meana[i],label="{0}".format(i+1))
-    ax.plot(list(range(1,len(msd_s_meana_cm[i])+1)),msd_s_meana_cm[i])
+# for i in range(len(msd_s_meana)):
+#     ax.plot(list(range(1,len(msd_s_meana[i])+1)),msd_s_meana[i],label="{0}".format(i+1))
+#     ax.plot(list(range(1,len(msd_s_meana_cm[i])+1)),msd_s_meana_cm[i])
 
-    ax.plot(msd_line(fit_msdaa[0],len(msd_s_meana[i])))
-        #plt.plot(msd_line2([a,b],len(m[i])))
-    #plt.plot(msd_line(fit_msdaa_cm[0],len(m[i])))
-ax2.plot(fit_verbosed[0])
-ax.annotate('A', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-ax2.annotate('B', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
-ax.set_ylabel("Log10 MSD (au)")
-ax.set_xlabel("Log10 Tau")
-#plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
-ax.set_yscale("log")
-ax.set_xscale("log")
+#     ax.plot(msd_line(fit_msdaa[0],len(msd_s_meana[i])))
+#         #plt.plot(msd_line2([a,b],len(m[i])))
+#     #plt.plot(msd_line(fit_msdaa_cm[0],len(m[i])))
+# ax2.plot(fit_verbosed[0])
+# ax.annotate('A', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+# ax2.annotate('B', xy=(-40, -10 + ax2.bbox.height), xycoords="axes pixels", fontsize=25, weight = 'bold')
+# ax.set_ylabel("Log10 MSD (au)")
+# ax.set_xlabel("Log10 Tau")
+# #plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
+# ax.set_yscale("log")
+# ax.set_xscale("log")
 
-ax2.set_ylabel("Diffusion Coefficient (au)")
-ax2.set_xlabel("Monomer Index")
-#plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
-# ax2.yscale("log")
-# ax2.xscale("log")
-#plt.legend()
-fig.tight_layout()
-fig.savefig("time")
-fig.show()
+# ax2.set_ylabel("Diffusion Coefficient (au)")
+# ax2.set_xlabel("Monomer Index")
+# #plt.title("P = {0}, M = {1}".format(sizeP,sizeM))
+# # ax2.yscale("log")
+# # ax2.xscale("log")
+# #plt.legend()
+# fig.tight_layout()
+# fig.savefig("time")
+# fig.show()
 
 
 
@@ -1038,50 +1038,50 @@ def plot_correlation_time(correlation):
 #testing out new animations for line plot only!
 ##########################################################################################################
 
-#fig = plt.figure()
-#ax1 = ax3d.Axes3D(fig)
-#line, = ax1.plot([], [], lw=1, linestyle= "-")
-#
-#ax1.set_xlim(0,sizeN)
-#ax1.set_ylim(0,sizeN)
-#ax1.set_zlim(0,sizeN)
-#ax1.set_xlabel("x")
-#ax1.set_ylabel("y")
-#ax1.set_zlabel("z")
-#ax1.text2D(0, 0, "Title", transform=ax1.transAxes)
-#
-#plotlays, plotcols = [np.sum(sizeP)], ["orange","black"]
-#lines = []
-#for index in range(np.sum(sizeP)):
-#    lobj = ax1.plot([],[],lw=1)[0]
-#    lines.append(lobj)
-#
-#def init():
-#    for line in lines:
-#        line.set_data([],[])
-#        line.set_3d_properties([])
-#    return lines
-#
-#def animate(i):
-#
-#    
-#    xlist = []
-#    ylist = []
-#    zlist = []
-#    
-#    for j in range(len(VA_data_type_O[i])):
-#        for k in range(len(VA_data_type_O[i][j])):
-#            xlist.append(np.asarray(VA_data_type_O[i][j][k])[:,0])
-#            ylist.append(np.asarray(VA_data_type_O[i][j][k])[:,1])
-#            zlist.append(np.asarray(VA_data_type_O[i][j][k])[:,2])
-#    for lnum,line in enumerate(lines):
-#        line.set_data(xlist[lnum], ylist[lnum])
-#        line.set_3d_properties(zlist[lnum])
-#    return lines
-#
-#anim = matplotlib.animation.FuncAnimation(fig, animate,init_func=init, frames=range(1,samples[0]), blit=True)
-#
-#plt.show()
+fig = plt.figure()
+ax1 = ax3d.Axes3D(fig)
+line, = ax1.plot([], [], lw=1, linestyle= "-")
+
+ax1.set_xlim(0,sizeN)
+ax1.set_ylim(0,sizeN)
+ax1.set_zlim(0,sizeN)
+ax1.set_xlabel("x")
+ax1.set_ylabel("y")
+ax1.set_zlabel("z")
+ax1.text2D(0, 0, "Title", transform=ax1.transAxes)
+
+plotlays, plotcols = [np.sum(sizeP)], ["orange","black"]
+lines = []
+for index in range(np.sum(sizeP)):
+   lobj = ax1.plot([],[],lw=1)[0]
+   lines.append(lobj)
+
+def init():
+   for line in lines:
+       line.set_data([],[])
+       line.set_3d_properties([])
+   return lines
+
+def animate(i):
+
+   
+   xlist = []
+   ylist = []
+   zlist = []
+   
+   for j in range(len(VA_data_type_O[i])):
+       for k in range(len(VA_data_type_O[i][j])):
+           xlist.append(np.asarray(VA_data_type_O[i][j][k])[:,0])
+           ylist.append(np.asarray(VA_data_type_O[i][j][k])[:,1])
+           zlist.append(np.asarray(VA_data_type_O[i][j][k])[:,2])
+   for lnum,line in enumerate(lines):
+       line.set_data(xlist[lnum], ylist[lnum])
+       line.set_3d_properties(zlist[lnum])
+   return lines
+
+anim = matplotlib.animation.FuncAnimation(fig, animate,init_func=init, frames=range(1,samples[0]), blit=True)
+
+plt.show()
 
 ##########################################################################################################
 ##########################################################################################################

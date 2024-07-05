@@ -12,7 +12,11 @@ timestamp3() {
     date +%H-%M-%S
 }
 
-vol_path="/Volumes/BP_2/Polymer_Weberlab/tools/$(timestamp2)"
+# vol_path="/Volumes/BP_2/Polymer_Weberlab/tools/$(timestamp2)"
+
+# find the tools directory if not already in it
+
+
 
 mkdir -p $PWD/logs
 mkdir -p $(timestamp2)
@@ -35,28 +39,26 @@ for i in "${ARRAY[@]}"; do
 	sed '14q;d' ini_v1.0.cfg
 	nohup ../build/src/Polymer ini_v1.0.cfg >> $PWD/logs/$time
 
-	#this sleep is to make sure there is no naming conflicts when polymer finishes below 1 second (smallest unit for 
+	# this sleep is to make sure there is no naming conflicts when polymer finishes below 1 second (smallest unit for 
 	#distinguishing file name)
 	sleep 5
 
 done
 timer=$(timestamp3)
 mkdir -p $(timestamp2)/$timer
-echo $(timestamp2)/$timer
 cd $(timestamp2)
 yourfilenames=$(ls *00)
 for eachfile in $yourfilenames
 do
-	echo $eachfile
 	mv $eachfile $timer/$eachfile
 done
 
 
-cd $timer
-yourfilenames=$(ls *0)
-for eachfile in $yourfilenames
-do
-	echo $eachfile
-	python3  /mnt/c/Users/Weberlab_Baljyot/source/repos/polymer/external/cpolymer_ana.py $eachfile
-done
+# cd $timer
+# yourfilenames=$(ls *0)
+# for eachfile in $yourfilenames
+# do
+# 	fullpath=$(find ~+ -type f -name "$eachfile")
+# 	python  ../../../external/cpolymer_ana.py $fullpath
+# done
 
