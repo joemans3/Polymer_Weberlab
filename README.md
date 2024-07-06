@@ -10,11 +10,23 @@ TODO
 What things you need to install the software and how to install them
 
 ```
-Boost library, standard library, c++11 compiler, libconfig
+Cmake, Boost library, standard library, c++11 compiler, libconfig++
+```
+Boost: https://www.boost.org. Follow the instructions to install the package. If you want to link manually remember to include the path to the library in the makefile or cmake file.
+
+Cmake: https://cmake.org/download/. Or using Homebrew on OSX:
+```
+brew install cmake
+```
+
+Libconfig++: https://github.com/hyperrealm/libconfig. Or using Homebrew on OSX:
+```
+brew install libconfig
 ```
 
 ### Installing
 TODO
+You can compile the program using cmake or the single file. Starting with the latter:
 Compile with command
 ```
 g++ -std=c++11 -lconfig++ temp_pf.cpp -o your_file_name
@@ -30,24 +42,43 @@ Comes with compiled OSX v.10.14.4. Have not tested with windows but linux works.
 Alternative Route:
 You can also let Cmake/make compile for you.
 
-After cloning this repository create a /Polymer_Weberlab/build/ directory in the main directory and change directory to it in Terminal. 
+After cloning this repository create a [path]/Polymer_Weberlab/build/ directory in the main directory and change directory to it.
+```
+cd [path]/Polymer_Weberlab
+mkdir build
+cd build
+```
 
 Type in the following to create make files:
 
 ```
-$ cmake ..
+cmake ..
 ```
 
 Followed by:
 
 ```
-$ make
-$ make clean
+make
 ```
 
-This will create an executable in the build directory called Polymer. You can interact with this exe using the above commands or use a custom script which creates logs and also iterates over multiple simulations. This is the file ```script_polymer``` (bash) in the /Polymer_Weberlab/tools/ directory. The output of this file will be in the same directory in terms of both log files and data files from Polymer. 
+This will create an executable in the build directory called Polymer. You can interact with this exe using the above commands or use a custom script which creates logs and also iterates over multiple simulations. This is the file ```script_polymer``` (bash) in the [path]/Polymer_Weberlab/tools/ directory. The output of this file will be in the same directory in terms of both log files and data files from Polymer. 
 
+## Running the executable
+TODO
+
+Naturally the script_polymer file will look for a configuration file in the tools directory. You can run the program with more flexibility by using the the script and change it to your needs. The configuration file is in the format of a .cfg file:
+```
+bash script_polymer [path_to_file]/[INIT_FILE_NAME].cfg
+```
 The script is currently set up to iterate over multiple temperatures for a set simulation structure but the user can easily change this to anything they like using the current code as template (and a little bash knowhow). TODO: create other custom bash scripts.
+
+
+You can choose not to use the script and just exceute the program with the configuration file as an argument. This will only create the output of one simualtion with the parameters given in the configuration file. Nothing more (you lose the flexibility of the script).
+
+```
+cd [path]/Polymer_Weberlab/build/src
+./Polymer [path_to_file]/[INIT_FILE_NAME].cfg
+```
 
 <!---
 A step by step series of examples that tell you how to get a development env running
